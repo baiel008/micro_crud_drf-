@@ -1,19 +1,6 @@
 from .models import *
 from rest_framework import serializers
 
-
-class UserProfileSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = '__all__'
-
-
-class UserProfileReviewSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['first_name', 'last_name']
-
-
 class CategoryListSerializers(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -69,13 +56,9 @@ class SubCategoryDetailSerializers(serializers.ModelSerializer):
 
 
 class ReviewSerializers(serializers.ModelSerializer):
-    created_date = serializers.DateField(format('%d-%m-%Y'))
-    user = UserProfileReviewSerializers()
-
     class Meta:
         model = Review
-        fields = ['user', "text", "stars", "created_date"]
-
+        fields = '__all__'
 
 class ProductDetailSerializers(serializers.ModelSerializer):
     created_date = serializers.DateField(format='%d-%m-%Y')
@@ -98,13 +81,3 @@ class ProductDetailSerializers(serializers.ModelSerializer):
         return obj.get_count_people()
 
 
-class CartSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Cart
-        fields = '__all__'
-
-
-class CartItemSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = CartItem
-        fields = '__all__'

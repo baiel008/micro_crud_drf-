@@ -22,7 +22,5 @@ class CategoryAdmin(admin.ModelAdmin):
     inlines = [SubCategoryInline]
 
 
-admin.site.register(UserProfile)
+
 admin.site.register(Review)
-admin.site.register(Cart)
-admin.site.register(CartItem)

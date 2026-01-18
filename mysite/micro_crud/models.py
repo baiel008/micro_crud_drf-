@@ -4,23 +4,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
 
 
-class UserProfile(AbstractUser):
-    age = models.PositiveSmallIntegerField(validators=[MinValueValidator(15),
-                                                       MaxValueValidator(60)],
-                                           null=True, blank=True)
-    phone_number = PhoneNumberField(null=True, blank=True)
-    STATUS_CHOICES = (
-        ('gold', 'gold'),
-        ('silver', 'silver'),
-        ('bronze', 'bronze'),
-        ('simple', 'simple'))
-    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default='simple')
-    date_registered = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.first_name},{self.last_name}'
-
-
 class Category(models.Model):
     category_image = models.ImageField(upload_to='category_images')
     category_name = models.CharField(max_length=20, unique=True)
@@ -69,21 +52,13 @@ class ProductImage(models.Model):
 
 
 class Review(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_reviews')
+    user_id = models.PositiveIntegerField()
+    product = models.PositiveIntegerField(unique=True)
     text = models.TextField()
     stars = models.PositiveIntegerField(choices=[(i, str(i)) for i in range(1, 6)])
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user}, {self.product}'
+        return f'{self.user_id}, {self.product}'
 
 
-class Cart(models.Model):
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-
-
-class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)

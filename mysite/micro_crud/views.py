@@ -1,23 +1,11 @@
-from .models import (UserProfile, Category, SubCategory,
-                     Product, Review,
-                     Cart, CartItem)
-from .serilizers import (UserProfileSerializers, CategoryListSerializers,
-                          SubCategoryListSerializers, SubCategoryDetailSerializers, ProductListSerializers,
-                          ProductDetailSerializers, CategoryDetailSerializers,
-                          ReviewSerializers,CartSerializers, CartItemSerializers)
+from .models import *
+from .serilizers import *
 from rest_framework import viewsets, generics, permissions, status
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProductFilter
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .pagination import ProductPagination, CategoryPagination
 
-
-class UserProfileViewSet(viewsets.ModelViewSet):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializers
-
-    def get_queryset(self):
-        return UserProfile.objects.filter(id=self.request.user.id)
 
 
 class CategoryListAPIView(generics.ListAPIView):
@@ -62,12 +50,5 @@ class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializers
     permission_classes = [permissions.IsAuthenticated]
 
-
-class CartViewSet(viewsets.ModelViewSet):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializers
-
-
-class CartItemViewSet(viewsets.ModelViewSet):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializers
+    def perform_create(self, serializer):
+        serializer.save(user_id=self.request.user.id)

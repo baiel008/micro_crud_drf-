@@ -1,15 +1,10 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import (UserProfileViewSet, CategoryListAPIView,
-                    SubCategoryListAPIView, SubCategoryDetailAPIView, ProductListAPIView,
-                    ProductDetailAPIView, CategoryDetailAPIView,ReviewViewSet,
-                    CartViewSet, CartItemViewSet)
-
+from .views import *
 router = routers.SimpleRouter()
-router.register(r'users', UserProfileViewSet)
+
 router.register(r'review', ReviewViewSet)
-router.register(r'cart', CartViewSet)
-router.register(r'cart_item', CartItemViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),
